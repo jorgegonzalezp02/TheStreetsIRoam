@@ -13,18 +13,29 @@
             }
             create() {
                 this.add.text(280,300,"Click to begin!", {fontSize:50});
-                this.input.on('pointerdown', () => this.scene.start('sceneB'));
+                this.input.on('pointerdown', () => this.scene.start('sceneB'), );
             }
         }
         class SceneB extends Phaser.Scene{
             constructor() {
                 super('sceneB')
             }
-            create() {
-                //this.cameras.main.fadeOut(2000, 112, 83, 53);
-                this.add.circle()
+            preload(){
                 this.cameras.main.setBackgroundColor("#705335");
-                this.add.text(300,300,'Loading', {fontSize:50});
+            }
+            create() {
+                this.cameras.main.fadeIn(1000);
+                let square = this.add.rectangle(600,343,50,50, 0xc9bdbd)
+                this.add.tween({
+                    targets: square,
+                    duration: 2000,
+                    repeat: -1,
+                    angle: 360,
+                })
+                this.add.text(300,300,'Loading', {fontSize:70, fontFamily: "Impact"});
+                this.time.delayedCall(2000, () => {
+                    this.camera.main.fadeOut(2000);
+                })
                 this.input.on('pointerdown', () => this.scene.start('sceneC'));
             }
         }
@@ -35,9 +46,16 @@
             }
             preload(){
                 this.load.image('hand_slap', "images/hand_slap.png");
+                this.cameras.main.setBackgroundColor("#ccac66");
             }
             create() {
-                this.add.sprite(500,300,'hand_slap');
+                this.cameras.main.fadeIn(2000);
+                let hand = this.add.sprite(550,200,'hand_slap');
+                hand.setScale(2.5)
+                this.add.tween({
+                    targets: hand,
+                    delay: 2000,
+                })
                 this.add.text(230,280,'SLAP STUDIOS', {
                     fontSize:100, 
                     fontFamily:"Impact", 
@@ -54,13 +72,44 @@
                 this.load.image('first_image_scene', "images/first_image_scene.png");
             }
             create() {
-                this.add.sprite(400,300,'first_image_scene');
+                this.cameras.main.fadeIn(2000);
+                let first = this.add.sprite(500,300,'first_image_scene');
+                first.setScale(2)
+                this.add.text(100,300,"Its been a while since I cameback in town.\nI just hope that no one was affected by\n           the Garr incident...",
+                 {fontSize: 30, fontWeight:"bold"})
+                this.input.on('pointerdown', () => this.scene.start('sceneE'));
+            }
+        }
+
+        class SceneE extends Phaser.Scene{
+            constructor(){
+                super('sceneE')
+            }
+            preload() {
+                this.load.image('main_image_scene', "images/main_image_scene.png");
+            }
+            create() {
+                this.cameras.main.fadeIn(3000);
+                let bg = this.add.image(500,200,"main_image_scene")
+                bg.setScale(2)
+                this.add.text(170,50,"THE STREETS I ROAM", {
+                    fontSize:85,
+                    fontFamily:"Impact",
+                    fontWeight: "bold"});
+                this.add.text(250,200,"START GAME", {fontSize:50, fontFamily: "Impact"})
+                this.add.text(250,300,"CONTINUE", {fontSize:50, fontFamily: "Impact"})
+                this.add.text(250,400,"OPTIONS", {fontSize:50, fontFamily:"Impact"})
+                this.add.text(250,500,"CREDITS", {fontSize:50, fontFamily:"Impact"})
+
+            }
+            update() {
+
             }
         }
         new Phaser.Game({
             width: 980,
             height: 640,
-            scene: [SceneA, SceneB, SceneC, SceneD],
+            scene: [SceneA, SceneB, SceneC, SceneD, SceneE],
         })
     </script>
 </head>
