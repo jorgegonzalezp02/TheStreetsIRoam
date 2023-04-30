@@ -7,6 +7,7 @@
     <title>The Streets I Roam cinematic</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.60.0/phaser.js" integrity="sha512-H05oT7BAjM9Ai1IaFX9zr61NtE2e1P0MkTz3AZXBnseaJSAOt2FGMFJ+vVGutaJxEGA1jxUiYsTBYQNE08/Erw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
+        // click here scene: complete
         class SceneA extends Phaser.Scene{
             constructor() {
                 super('sceneA');
@@ -16,6 +17,7 @@
                 this.input.on('pointerdown', () => this.scene.start('sceneB'), );
             }
         }
+        // loding background: complete
         class SceneB extends Phaser.Scene{
             constructor() {
                 super('sceneB')
@@ -26,6 +28,7 @@
             create() {
                 this.cameras.main.fadeIn(1000);
                 let square = this.add.rectangle(600,343,50,50, 0xc9bdbd)
+                square.setStrokeStyle(6, 0x000000)
                 this.add.tween({
                     targets: square,
                     duration: 2000,
@@ -33,37 +36,51 @@
                     angle: 360,
                 })
                 this.add.text(300,300,'Loading', {fontSize:70, fontFamily: "Impact"});
-                this.time.delayedCall(2000, () => {
-                    this.camera.main.fadeOut(2000);
-                })
-                this.input.on('pointerdown', () => this.scene.start('sceneC'));
+                this.time.delayedCall(3000, () => {
+                    this.cameras.main.fadeOut(2000);
+                });
+
+                this.time.delayedCall(5000, () => this.scene.start('sceneC'));
             }
         }
-
+        // company logo scene: complete
         class SceneC extends Phaser.Scene{
             constructor() {
                 super('sceneC')
             }
             preload(){
                 this.load.image('hand_slap', "images/hand_slap.png");
+                this.load.audio('slap', "audio/hard_slap_audio.mp3");
                 this.cameras.main.setBackgroundColor("#ccac66");
             }
             create() {
                 this.cameras.main.fadeIn(2000);
                 let hand = this.add.sprite(550,200,'hand_slap');
+                hand.alpha = 0
                 hand.setScale(2.5)
-                this.add.tween({
-                    targets: hand,
-                    delay: 2000,
-                })
-                this.add.text(230,280,'SLAP STUDIOS', {
+
+                let studio = this.add.text(230,280,'SLAP STUDIOS', {
                     fontSize:100, 
                     fontFamily:"Impact", 
                     fontWeight: "bold"});
-                this.input.on('pointerdown', () => this.scene.start('sceneD'));
+                let slap_audio = this.sound.add('slap')
+                this.add.tween({
+                    targets: [slap_audio,hand],
+                    volume: 1,
+                    delay: 3000,
+                    alpha: 1,
+                    duration: 0,
+                    onStart: function() {
+                        slap_audio.play()
+                    }
+                })
+                this.time.delayedCall(4000, () => {
+                    this.cameras.main.fadeOut(2000);
+                });
+                this.time.delayedCall(6000, () => this.scene.start('sceneD'));
             }
         }
-
+        // story intro scene: complete
         class SceneD extends Phaser.Scene{
             constructor() {
                 super('sceneD')
@@ -72,38 +89,119 @@
                 this.load.image('first_image_scene', "images/first_image_scene.png");
             }
             create() {
-                this.cameras.main.fadeIn(2000);
+                this.cameras.main.fadeIn(1000);
                 let first = this.add.sprite(500,300,'first_image_scene');
                 first.setScale(2)
-                this.add.text(100,300,"Its been a while since I cameback in town.\nI just hope that no one was affected by\n           the Garr incident...",
+
+                let multi_text = this.add.text(100,300,"Its been a while since I was back in town.\nI just hope that no one was affected by\n           the Garr incident...",
                  {fontSize: 30, fontWeight:"bold"})
-                this.input.on('pointerdown', () => this.scene.start('sceneE'));
+                multi_text.alpha = 0
+                this.add.tween({
+                    targets: multi_text,
+                    delay: 1000,
+                    alpha: 1,
+                })
+                this.add.tween({
+                    targets: multi_text,
+                    alpha: 0,
+                    delay: 4500
+                })
+
+                 this.time.delayedCall(5000, () => {
+                    this.cameras.main.fadeOut(2000);
+                });
+                this.time.delayedCall(7000, () => this.scene.start('sceneE'));
             }
         }
-
+        // main intro scene: in progress
         class SceneE extends Phaser.Scene{
             constructor(){
                 super('sceneE')
             }
             preload() {
                 this.load.image('main_image_scene', "images/main_image_scene.png");
+                this.load.audio('drums', "audio/fast_amen_break_audio.mp3");
             }
             create() {
                 this.cameras.main.fadeIn(3000);
                 let bg = this.add.image(500,200,"main_image_scene")
                 bg.setScale(2)
-                this.add.text(170,50,"THE STREETS I ROAM", {
+
+                let menu_music = this.sound.add('drums')
+                menu_music.setVolume(0.2)
+                menu_music.play()
+
+                let circle = this.add.circle(200,230,30,0xAF2B1E)
+                circle.setStrokeStyle(4, 0x000000)
+                this.tweens.add({
+                    targets: circle,
+                    scaleX: 0.5,
+                    scaleY: 0.2,
+                    yoyo: true,
+                    repeat: -1,
+                    ease: 'Sine.easeInOut'
+                });
+
+                let main_text = this.add.text(170,50,"THE STREETS I ROAM", {
                     fontSize:85,
                     fontFamily:"Impact",
                     fontWeight: "bold"});
-                this.add.text(250,200,"START GAME", {fontSize:50, fontFamily: "Impact"})
-                this.add.text(250,300,"CONTINUE", {fontSize:50, fontFamily: "Impact"})
-                this.add.text(250,400,"OPTIONS", {fontSize:50, fontFamily:"Impact"})
-                this.add.text(250,500,"CREDITS", {fontSize:50, fontFamily:"Impact"})
+                main_text.setTint(0xe07638 ,0xe0a238, 0xe0cf38)
+                main_text.setInteractive();
 
+                this.add.tween({
+                    targets: main_text,
+                    scale: 1.05,
+                    duration: 800,
+                    yoyo: true,
+                    repeat: -1
+                })
+                let start = this.add.text(250,200,"START GAME", {fontSize:50, fontFamily: "Impact"})
+                start.setInteractive();
+                this.add.tween({
+                    targets: start,
+                    scale: 1.05,
+                    duration: 800,
+                    yoyo: true,
+                    repeat: -1
+                })
+
+                let cont = this.add.text(250,300,"CONTINUE", {fontSize:50, fontFamily: "Impact"})
+                cont.setInteractive();
+                this.add.tween({
+                    targets: cont,
+                    scale: 1.05,
+                    duration: 800,
+                    yoyo: true,
+                    repeat: -1
+                })
+
+                let op = this.add.text(250,400,"OPTIONS", {fontSize:50, fontFamily:"Impact"})
+                op.setInteractive();
+                this.add.tween({
+                    targets: op,
+                    scale: 1.05,
+                    duration: 800,
+                    yoyo: true,
+                    repeat: -1
+                })
+
+                let cred = this.add.text(250,500,"CREDITS", {fontSize:50, fontFamily:"Impact"})
+                cred.setInteractive();
+                this.add.tween({
+                    targets: cred,
+                    scale: 1.05,
+                    duration: 800,
+                    yoyo: true,
+                    repeat: -1
+                })
             }
             update() {
-
+                let menu_music = this.sound.get('drums')
+                if (!menu_music.isPlaying) {
+                    menu_music.play()
+                    menu_music.setSeek(1)
+                }
             }
         }
         new Phaser.Game({
