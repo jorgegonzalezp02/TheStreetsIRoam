@@ -12,4 +12,4 @@ https://www.pixilart.com/draw?gclid=CjwKCAjwo7iiBhAEEiwAsIxQETY30_DDNwMHyBBNdhUJ
 - **1+ logotype**: The fancy text is the name of the game in the main menu scene.
 - **1+ multi-line text**: The multi-line text is the starting story text scene.
 - **1+ fading animation**: The fading animation is used in almost every scene transition.
-- **1+ object motion animation**: The objects in motion are the geometric shapes.
+- **1+ object motion animation**: The objects in motion are the geometric shapes located in the loading scene and the main menu scene.
