@@ -205,8 +205,12 @@
             }
         }
         new Phaser.Game({
-            width: 980,
-            height: 640,
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH,
+                width: 980,
+                height: 640,
+            },
             scene: [SceneA, SceneB, SceneC, SceneD, SceneE],
         })
     </script>
